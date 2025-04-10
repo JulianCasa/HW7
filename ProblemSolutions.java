@@ -7,6 +7,7 @@
  *
  ********************************************************************/
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ProblemSolutions {
@@ -42,7 +43,35 @@ public class ProblemSolutions {
             // "SELECTION SORT" ALGORITHM.
             // DO NOT FORGET TO ADD YOUR NAME / SECTION ABOVE
 
+            if (ascending == true) {
+                int minIndex = i;
+                // Inner loop for finding the minimum element in the unsorted portion
+                for (int j = i + 1; j < n; j++) {
+                    if (values[j] < values[minIndex]) {
+                        minIndex = j;
+                    }
+                }
+                // Swap the found minimum element with the first element
+                int temp = values[minIndex];
+                values[minIndex] = values[i];
+                values[i] = temp;
+            } 
+            // If descending sort
+            else {
+                int maxIndex = i;
+                // Inner loop for finding the maximum element in the unsorted portion
+                for (int j = i + 1; j < n; j++) {
+                    if (values[j] > values[maxIndex]) {
+                        maxIndex = j;
+                    }
+                }
+                // Swap the found maximum element with the first element
+                int temp = values[maxIndex];
+                values[maxIndex] = values[i];
+                values[i] = temp;
+            }
         }
+        
 
     } // End class selectionSort
 
@@ -102,6 +131,63 @@ public class ProblemSolutions {
         // TO CODE WITH A SPACE COMPLEXITY OF O(N LOG N), WHICH IS FINE FOR PURPOSES
         // OF THIS PROGRAMMING EXERCISES.
 
+        int[] temp = new int[left - right + 1];
+        int i = left;
+        int j = mid + 1;
+        int base = 0;
+
+        while (i <= mid && j <= right) {
+            // Check if the left element is divisible by k
+            if (arr[i] % k == 0) {
+                temp[base++] = arr[i++];
+            } else if (arr[j] % k == 0) {
+                temp[base++] = arr[j++];
+            } else if (arr[i] < arr[j]) {
+                temp[base++] = arr[i++];
+            } else if (arr[i] > arr[j]) {
+                temp[base++] = arr[j++];
+            }
+            else{
+                break;
+            }
+
+            while (i <= mid && arr[i] % k == 0) {
+                temp[base++] = arr[i++];
+            }
+        
+            while (j <= right && arr[j] % k == 0) {
+                temp[base++] = arr[j++];
+            }
+        
+            // Then, merge remaining elements (not divisible by k)
+            i = left;
+            j = mid + 1;
+            while (i <= mid && j <= right) {
+                if (arr[i] % k != 0 && arr[j] % k != 0) {
+                    temp[base++] = arr[i] <= arr[j] ? arr[i++] : arr[j++];
+                } else if (arr[i] % k != 0) {
+                    temp[base++] = arr[i++];
+                } else if (arr[j] % k != 0) {
+                    temp[base++] = arr[j++];
+                } else {
+                    break;
+                }
+            }
+        
+            while (i <= mid && arr[i] % k != 0) {
+                temp[base++] = arr[i++];
+            }
+        
+            while (j <= right && arr[j] % k != 0) {
+                temp[base++] = arr[j++];
+            }
+        
+            // Copy merged content back into original array
+            for (int m = 0; m < temp.length; m++) {
+                arr[left + m] = temp[m];
+            }
+        }
+
         return;
 
     }
@@ -155,8 +241,23 @@ public class ProblemSolutions {
     public static boolean asteroidsDestroyed(int mass, int[] asteroids) {
 
         // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT()
+        boolean canDestroy = true;
 
-        return false;
+        // Sort the asteroids in ascending order
+        Arrays.sort(asteroids);
+        //loops through the array and adds whatever can be destroyed to the mass
+        for (int i : asteroids){
+            if (mass >= i){
+                mass += i;
+            } else {
+                //If the mass cant be destroyed, set canDestroy to false and break the loop
+                canDestroy = false;
+                break;
+            }
+        }
+        
+
+        return canDestroy;
 
     }
 
@@ -193,8 +294,21 @@ public class ProblemSolutions {
     public static int numRescueSleds(int[] people, int limit) {
 
         // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT
+        int sledNum = 0;
 
-        return -1;
+        //Sort the array in ascending order
+        Arrays.sort(people);
+
+        //loops through the array and checks if the first and last elements can be added to the sled
+        for (int i = 0, j = people.length - 1; i <= j; j--){
+            //If the first and last elements can be added to the sled, increment i and sledNum
+            if (people[i] + people[j] <= limit){
+                i++;
+            }
+            sledNum++;
+        }
+
+        return sledNum;
 
     }
 
